@@ -1,8 +1,66 @@
 <header class="flex">
   <img alt="Valant logo" width="150" src="../assets/valant_logo.png" />
-  <h1>Welcome to {{ title }}</h1>
+  <h1>Welcome to {{ title }} by Natnael Tezera</h1>
 </header>
+
 <main>
-  <h2>Hi there</h2>
-  <p>Thanks for being you.</p>
+  <div class="row">
+    <div class="col-sm-2.5">
+      <p>Choose a Maze</p>
+      <div class="row" *ngFor="let mazename of mazenames" style="margin: 5%; background-color: green">
+        <button class="btn btn-success" (click)="loadMaze(mazename.fileName)">{{ mazename.fileName }}</button>
+      </div>
+      <div class="col-md-12">
+        <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display: none" />
+        <button type="button" (click)="file.click()">Upload Maze</button>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <span class="upload" *ngIf="progress > 0"> {{ progress }}% </span>
+        <span class="upload" *ngIf="message">
+          {{ message }}
+        </span>
+      </div>
+    </div>
+    <div class="col-md-7 col-sm-12">
+      <p *ngIf="isMazeLoaded">Find Your Way Out.</p>
+      <p *ngIf="!isMazeLoaded">{{ mazeTitle }}</p>
+      <div class="row" *ngFor="let mazeRow of maze" style="border-style: solid">
+        <div class="col" *ngFor="let mazeCol of mazeRow" style="border-style: solid">
+          <p *ngIf="mazeCol.currentLocation" style="background-color: red">{{ mazeCol.symbol }}</p>
+          <!--<img
+            *ngIf="mazeCol.currentLocation"
+            src="../assets/smallrunner.png"
+            style="height: 15px; width: 15px; background-color: red"
+          />-->
+          <p *ngIf="!mazeCol.currentLocation">{{ mazeCol.symbol }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-12" style="margin-left: 1%" *ngIf="isMazeLoaded">
+      <div class="row">
+        <p>Instructions</p>
+        <p style="font-size: x-small">S=Maze Start, O=Path, X=Wall, E=Maze Exit</p>
+      </div>
+      <div class="row">
+        <button (click)="goNorth()" style="border: solid; text-align: center; width: 60px">North</button>
+      </div>
+      <br />
+      <div class="row">
+        <button (click)="goSouth()" style="border: solid; text-align: center; width: 60px">South</button>
+      </div>
+
+      <br />
+      <div class="row">
+        <button (click)="goEast()" style="border: solid; text-align: center; width: 60px">East</button>
+      </div>
+      <br />
+      <div class="row">
+        <button (click)="goWest()" style="border: solid; text-align: center; width: 60px">west</button>
+      </div>
+      <div class="row" *ngIf="isWall">
+        <p style="color: red">No path! Please Try Another Direction!</p>
+      </div>
+    </div>
+  </div>
 </main>
